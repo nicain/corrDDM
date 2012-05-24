@@ -53,7 +53,7 @@ def DDMOU(settings, int FD,int perLoc):
     # Parameter space loop:
     counter = 0
     for currentSettings in settingsIterator:
-        N, corr, dt, rP, rN, theta = currentSettings   # Alphabetized, caps first!
+        N, corr, dt, rN, rP, theta = currentSettings   # Alphabetized, caps first!
 
         # Initialize for current parameter space value
         crossTimes = 0
@@ -71,20 +71,16 @@ def DDMOU(settings, int FD,int perLoc):
                 t += dt
             
                 # Pref population:
-                if myTwister.randDblExc() < dt*rP*.001*corr:
-                    cumSum += N
-                else:
+                if myTwister.randDblExc() < dt*rP*.001/corr:      
                     for currN in range(N):
-                        if myTwister.randDblExc() < dt*rP*.001*(1-corr):
-                            cumSum += 1
+                        if myTwister.randDblExc() < corr:
+                            cumSum += N
                                 
                 # Null population:
-                if myTwister.randDblExc() < dt*rN*.001*corr:
-                    cumSum -= N
-                else:
+                if myTwister.randDblExc() < dt*rN*.001/corr:      
                     for currN in range(N):
-                        if myTwister.randDblExc() < dt*rN*.001*(1-corr):
-                            cumSum -= 1
+                        if myTwister.randDblExc() < corr:
+                            cumSum -= N
 
                     
             # Decide correct or not:
