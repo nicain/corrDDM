@@ -53,7 +53,7 @@ def DDMOU(settings, int FD,int perLoc):
     # Parameter space loop:
     counter = 0
     for currentSettings in settingsIterator:
-        N, corr, dt, rP, rN, theta = currentSettings   # Alphabetized, caps first!
+        N, corr, dt, rN rP, theta = currentSettings   # Alphabetized, caps first!
 
         # Initialize for current parameter space value
         crossTimes = 0
