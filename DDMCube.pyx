@@ -59,6 +59,8 @@ def DDMOU(settings, int FD,int perLoc):
         crossTimes = 0
         results = 0
         
+        
+        
         # Loop across number of sims, at this point in parameter space
         for i in range(perLoc):
             
@@ -71,16 +73,16 @@ def DDMOU(settings, int FD,int perLoc):
                 t += dt
             
                 # Pref population:
-                if myTwister.randDblExc() < dt*rP*.001/corr:      
+                if myTwister.randDblExc() < (dt*rP*.001)/corr:
                     for currN in range(N):
                         if myTwister.randDblExc() < corr:
-                            cumSum += N
+                            cumSum += 1
                                 
                 # Null population:
-                if myTwister.randDblExc() < dt*rN*.001/corr:      
+                if myTwister.randDblExc() < (dt*rN*.001)/corr:      
                     for currN in range(N):
                         if myTwister.randDblExc() < corr:
-                            cumSum -= N
+                            cumSum -= 1
 
                     
             # Decide correct or not:
