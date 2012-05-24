@@ -1,25 +1,25 @@
 # Define job:
-quickNamePrefix = 'corrDDMDebug'
+quickNamePrefix = 'corrDDMSIPSIdtCheckBig'
 dryRun = 0
-localRun = 1
+localRun = 0
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
-waitForSims = 1
-wallTime = 5000
+waitForSims = 0
+wallTime = 10000
 wallTimeEstCount = 1
 queue = 'default'
 FD=0
 
 # Divide jobs among processing unit settings:
-nodes = 1
-procsPerNode = 1
+nodes = 4*15
+procsPerNode = 8
 repsPerProc = 1
 simsPerRep = 100
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,50,10)),
-'N':[5],
-'dt':[.01],
+'theta':list(numpy.linspace(.01,1000,10)),
+'N':[240],
+'dt':[.5,.1,.05,.01],
 'corr':[.15],
-'rP':[19],
-'rN':[21]}
+'rP':[21],
+'rN':[19]}
