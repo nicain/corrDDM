@@ -13,11 +13,11 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 100
+simsPerRep = 10000
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,5,10)),
+'theta':list(numpy.linspace(.01,5,2)),
 'N':[5],
 'dt':[.1],
 'corr':[.15],

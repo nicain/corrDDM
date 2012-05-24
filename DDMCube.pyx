@@ -12,25 +12,36 @@ cdef extern from "MersenneTwister.h":
 cdef extern from "math.h":
     float sqrt(float sqrtMe)
     float fabs(float absMe)
+    float log(float logMe)
+
+# Import essential c packages:
+import numpy as np
+cimport numpy as np
+cimport cython
+
+# Compile-time type initialization for numpy arrays:
+ctypedef np.float_t DTYPE_t    
 
 ################################################################################
 ######################## Main function, the workhorse:  ########################
 ################################################################################
+@cython.boundscheck(False)
 def DDMOU(settings, int FD,int perLoc):
 
     # Import necessary python packages:
     import random, uuid, os, product
     from numpy import zeros
     from math import exp
+    import scipy
     
     # C initializations
     cdef int i, currN
     cdef float corr, dt, rP, rN
-    cdef int N
+    cdef int N, tempS
     cdef float t, results, crossTimes, theta
     cdef unsigned long mySeed[624]
     cdef c_MTRand myTwister
-    cdef float cumSum
+    cdef float cumSum, wp1, wp0, wn1, wn0, P0,P1, N0, N1
     
     # Convert settings dictionary to iterator:
     params = settings.keys()
@@ -50,6 +61,13 @@ def DDMOU(settings, int FD,int perLoc):
     for i in range(624): mySeed[i] = random.randint(0,int(exp(21)))
     myTwister.seed(mySeed)
 
+    
+    # for numpy
+    DTYPE = np.float                    # Initialize a data-type for the array
+    NMax = 1000
+    cdef np.ndarray[DTYPE_t, ndim=1] binCoeffP = np.zeros(NMax, dtype=DTYPE)
+    cdef np.ndarray[DTYPE_t, ndim=1] binCoeffN = np.zeros(NMax, dtype=DTYPE) 
+
     # Parameter space loop:
     counter = 0
     for currentSettings in settingsIterator:
@@ -58,6 +76,13 @@ def DDMOU(settings, int FD,int perLoc):
         # Initialize for current parameter space value
         crossTimes = 0
         results = 0
+        for i in range(N+1):
+            binCoeffP[i] = scipy.misc.comb(N,i)*(dt*rP*.001*(1-corr))**i*(1-(dt*rP*.001*(1-corr)))**(N-i)
+            binCoeffN[i] = scipy.misc.comb(N,i)*(dt*rN*.001*(1-corr))**i*(1-(dt*rN*.001*(1-corr)))**(N-i)
+        P0 = (1-dt*rP*.001/corr)
+        N0 = (1-dt*rN*.001/corr)
+        P1 = (dt*rP*.001/corr)
+        N1 = (dt*rN*.001/corr)
         
         # Loop across number of sims, at this point in parameter space
         for i in range(perLoc):
@@ -72,19 +97,35 @@ def DDMOU(settings, int FD,int perLoc):
             
                 # Pref population:
                 if myTwister.randDblExc() < dt*rP*.001*corr:
-                    cumSum += N
+                    tempS = N
                 else:
+                    tempS = 0
                     for currN in range(N):
                         if myTwister.randDblExc() < dt*rP*.001*(1-corr):
-                            cumSum += 1
+                            tempS += 1
+                if tempS==N:
+                    wp1 = log(P1 + P0*(dt*rP*.001*corr)**N)
+                    wp0 = log(N1 + N0*(dt*rN*.001*corr)**N)
+                else:
+                    wp1 = log(P0*binCoeffP[tempS])
+                    wp0 = log(N0*binCoeffN[tempS])
+                cumSum += wp1 - wp0
                                 
                 # Null population:
                 if myTwister.randDblExc() < dt*rN*.001*corr:
-                    cumSum -= N
+                    tempS = N
                 else:
+                    tempS = 0
                     for currN in range(N):
                         if myTwister.randDblExc() < dt*rN*.001*(1-corr):
-                            cumSum -= 1
+                            tempS += 1
+                if tempS==N:
+                    wn1 = log(N1 + N0*(dt*rN*.001*corr)**N)
+                    wn0 = log(P1 + P0*(dt*rP*.001*corr)**N)
+                else:
+                    wn1 = log(N0*binCoeffN[tempS])
+                    wn0 = log(P0*binCoeffP[tempS])
+                cumSum += wn1 - wn0
 
                     
             # Decide correct or not:
