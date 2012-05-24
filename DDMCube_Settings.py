@@ -17,9 +17,9 @@ simsPerRep = 10000
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,30,2)),
-'N':[5],
-'dt':[.01],
+'theta':list(numpy.linspace(.01,500,2)),
+'N':[240],
+'dt':[.1],
 'corr':[.15],
 'rP':[21],
 'rN':[19]}
