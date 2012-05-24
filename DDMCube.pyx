@@ -5,7 +5,7 @@
 # Wrapper for the RNG:
 cdef extern from "MersenneTwister.h":
     ctypedef struct c_MTRand "MTRand":
-        double randNorm( double mean, double stddev)
+        double randDblExc()
         void seed( unsigned long bigSeed[])
 
 # External math functions that are needed:
@@ -24,16 +24,13 @@ def DDMOU(settings, int FD,int perLoc):
     from math import exp
     
     # C initializations
-#    cdef float xCurr, tCurr, yCurrP, yCurrN, C, xStd, xTau, xNoise, COn, CPost, tFrac, tieBreak,tBeginFrac, tBegin, CNull
-#    cdef float dt, theta, crossTimes, results, chop, beta, K, yTau, A, B, yBegin, tMax,chopHat, noiseSigma
-
-
-    cdef int i, overTime
-    cdef double N, corr, dt, rP, rN
-    cdef double t, results, crossTimes
+    cdef int i, currN
+    cdef float corr, dt, rP, rN
+    cdef int N
+    cdef float t, results, crossTimes, theta
     cdef unsigned long mySeed[624]
     cdef c_MTRand myTwister
-    cdef double mean = 0, std = 1
+    cdef float cumSum
     
     # Convert settings dictionary to iterator:
     params = settings.keys()
@@ -56,18 +53,44 @@ def DDMOU(settings, int FD,int perLoc):
     # Parameter space loop:
     counter = 0
     for currentSettings in settingsIterator:
-        N, corr, dt, rP, rN = currentSettings        # Must be alphabetized, with capitol letters coming first!
+        N, corr, dt, rP, rN, theta = currentSettings   # Alphabetized, caps first!
 
-
-        # Initialize for current loop
-        t = 0
+        # Initialize for current parameter space value
         crossTimes = 0
         results = 0
-
+        
         # Loop across number of sims, at this point in parameter space
         for i in range(perLoc):
-            results += 1
-            crossTimes += 1
+            
+            # Initilize DDM
+            t = 0
+            cumSum = 0
+            while fabs(cumSum) < theta:
+                
+                # Increment time
+                t += dt
+            
+                # Pref population:
+                if myTwister.randDblExc() < dt*rP*.001*corr:
+                    cumSum += N
+                else:
+                    for currN in range(N):
+                        if myTwister.randDblExc() < dt*rP*.001*(1-corr):
+                            cumSum += 1
+                                
+                # Null population:
+                if myTwister.randDblExc() < dt*rN*.001*corr:
+                    cumSum -= N
+                else:
+                    for currN in range(N):
+                        if myTwister.randDblExc() < dt*rN*.001*(1-corr):
+                            cumSum -= 1
+
+                    
+            # Decide correct or not:
+            if cumSum >= theta:
+                results += 1
+            crossTimes += t
                     
                     
 
