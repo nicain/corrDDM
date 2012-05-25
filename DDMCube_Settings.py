@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMSIPSPRTOvershootDebug'
+quickNamePrefix = 'corrDDMSIPSPRTBigOvershoot'
 dryRun = 0
 localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
@@ -13,12 +13,12 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 1000
+simsPerRep = 50000
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,5,3)),
-'N':[5],
+'theta':list(numpy.linspace(.01,3,10)),
+'N':[240],
 'dt':[.1],
 'corr':[.15],
 'rP':[21],
