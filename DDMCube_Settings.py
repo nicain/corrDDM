@@ -13,7 +13,7 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 50000
+simsPerRep = 10000
 
 # Define job settings:
 settings={
