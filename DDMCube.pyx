@@ -104,8 +104,8 @@ def DDMOU(settings, int FD,int perLoc):
                         if myTwister.randDblExc() < dt*rP*.001*(1-corr):
                             tempS += 1
                 if tempS==N:
-                    wp1 = log(P1 + P0*(dt*rP*.001*corr)**N)
-                    wp0 = log(N1 + N0*(dt*rN*.001*corr)**N)
+                    wp1 = log(P1 + P0*(dt*rP*.001*(1-corr))**N)
+                    wp0 = log(N1 + N0*(dt*rN*.001*(1-corr))**N)
                 else:
                     wp1 = log(P0*binCoeffP[tempS])
                     wp0 = log(N0*binCoeffN[tempS])
@@ -120,8 +120,8 @@ def DDMOU(settings, int FD,int perLoc):
                         if myTwister.randDblExc() < dt*rN*.001*(1-corr):
                             tempS += 1
                 if tempS==N:
-                    wn1 = log(N1 + N0*(dt*rN*.001*corr)**N)
-                    wn0 = log(P1 + P0*(dt*rP*.001*corr)**N)
+                    wn1 = log(N1 + N0*(dt*rN*.001*(1-corr))**N)
+                    wn0 = log(P1 + P0*(dt*rP*.001*(1-corr))**N)
                 else:
                     wn1 = log(N0*binCoeffN[tempS])
                     wn0 = log(P0*binCoeffP[tempS])
