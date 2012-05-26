@@ -38,7 +38,7 @@ def DDMOU(settings, int FD,int perLoc):
     cdef int i, currN
     cdef float corr, corrInv, dt, rP, rN
     cdef int N, tempS
-    cdef float t, results, crossTimes, theta
+    cdef float t, results, overShootP, theta
     cdef unsigned long mySeed[624]
     cdef c_MTRand myTwister
     cdef float cumSum, wp1, wp0, wn1, wn0, P0,P1, N0, N1
@@ -53,7 +53,7 @@ def DDMOU(settings, int FD,int perLoc):
         totalLength *= len(settings[parameter])
     settingsIterator = product.product(*settingsList)
     resultsArray = zeros(totalLength, dtype=float)
-    crossTimesArray = zeros(totalLength, dtype=float)
+    overShootArray = zeros(totalLength, dtype=float)
 
     # Initialization of random number generator:
     myUUID = uuid.uuid4()
@@ -74,7 +74,7 @@ def DDMOU(settings, int FD,int perLoc):
 
         # Initialize for current parameter space value
         corrInv = 1/corr
-        crossTimes = 0
+        overShootP = 0
         results = 0
         for i in range(N+1):
             binCoeff[i] = scipy.misc.comb(N,i)*(corr)**i*(1-corr)**(N-i)
@@ -127,13 +127,13 @@ def DDMOU(settings, int FD,int perLoc):
             # Decide correct or not:
             if cumSum >= theta:
                 results += 1
-            crossTimes += t
+                overShootP += cumSum - theta
                     
                     
 
         # Record results:
         resultsArray[counter] = results
-        crossTimesArray[counter] = crossTimes
+        overShootArray[counter] = overShootP
         counter += 1
 
-    return (resultsArray, crossTimesArray)
+    return (resultsArray, overShootArray)
