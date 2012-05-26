@@ -36,7 +36,7 @@ def DDMOU(settings, int FD,int perLoc):
     
     # C initializations
     cdef int i, currN
-    cdef float corr, dt, rP, rN
+    cdef float corr, corrInv, dt, rP, rN
     cdef int N, tempS
     cdef float t, results, crossTimes, theta
     cdef unsigned long mySeed[624]
@@ -65,8 +65,7 @@ def DDMOU(settings, int FD,int perLoc):
     # for numpy
     DTYPE = np.float                    # Initialize a data-type for the array
     NMax = 1000
-    cdef np.ndarray[DTYPE_t, ndim=1] binCoeffP = np.zeros(NMax, dtype=DTYPE)
-    cdef np.ndarray[DTYPE_t, ndim=1] binCoeffN = np.zeros(NMax, dtype=DTYPE) 
+    cdef np.ndarray[DTYPE_t, ndim=1] binCoeff = np.zeros(NMax, dtype=DTYPE)
 
     # Parameter space loop:
     counter = 0
@@ -74,11 +73,11 @@ def DDMOU(settings, int FD,int perLoc):
         N, corr, dt, rN, rP, theta = currentSettings   # Alphabetized, caps first!
 
         # Initialize for current parameter space value
+        corrInv = 1/corr
         crossTimes = 0
         results = 0
         for i in range(N+1):
-            binCoeffP[i] = scipy.misc.comb(N,i)*(dt*rP*.001*(1-corr))**i*(1-(dt*rP*.001*(1-corr)))**(N-i)
-            binCoeffN[i] = scipy.misc.comb(N,i)*(dt*rN*.001*(1-corr))**i*(1-(dt*rN*.001*(1-corr)))**(N-i)
+            binCoeff[i] = scipy.misc.comb(N,i)*(corr)**i*(1-corr)**(N-i)
         P0 = (1-dt*rP*.001/corr)
         N0 = (1-dt*rN*.001/corr)
         P1 = (dt*rP*.001/corr)
@@ -96,38 +95,35 @@ def DDMOU(settings, int FD,int perLoc):
                 t += dt
             
                 # Pref population:
-                if myTwister.randDblExc() < dt*rP*.001*corr:
-                    tempS = N
-                else:
+                if myTwister.randDblExc() < dt*rP*.001*corrInv:
                     tempS = 0
                     for currN in range(N):
-                        if myTwister.randDblExc() < dt*rP*.001*(1-corr):
+                        if myTwister.randDblExc() < corr:
                             tempS += 1
-                if tempS==N:
-                    wp1 = log(P1 + P0*(dt*rP*.001*corr)**N)
-                    wp0 = log(N1 + N0*(dt*rN*.001*corr)**N)
-                else:
-                    wp1 = log(P0*binCoeffP[tempS])
-                    wp0 = log(N0*binCoeffN[tempS])
-                cumSum += wp1 - wp0
-                                
-                # Null population:
-                if myTwister.randDblExc() < dt*rN*.001*corr:
-                    tempS = N
-                else:
-                    tempS = 0
-                    for currN in range(N):
-                        if myTwister.randDblExc() < dt*rN*.001*(1-corr):
-                            tempS += 1
-                if tempS==N:
-                    wn1 = log(N1 + N0*(dt*rN*.001*corr)**N)
-                    wn0 = log(P1 + P0*(dt*rP*.001*corr)**N)
-                else:
-                    wn1 = log(N0*binCoeffN[tempS])
-                    wn0 = log(P0*binCoeffP[tempS])
-                cumSum += wn1 - wn0
+                
+                    if tempS == 0:
+                        wp1 = log(P0 + P1*binCoeff[tempS])
+                        wp0 = log(N0 + N1*binCoeff[tempS])
+                    else:
+                        wp1 = log(P1*binCoeff[tempS])
+                        wp0 = log(N1*binCoeff[tempS])
+                        cumSum += wp1 - wp0
 
-                    
+                # Null population
+                if myTwister.randDblExc() < dt*rN*.001*corrInv:
+                    tempS = 0
+                    for currN in range(N):
+                        if myTwister.randDblExc() < corr:
+                            tempS += 1
+
+                    if tempS == 0:
+                        wn1 = log(N0 + N1*binCoeff[tempS])
+                        wn0 = log(P0 + P1*binCoeff[tempS])
+                    else:
+                        wn1 = log(N1*binCoeff[tempS])
+                        wn0 = log(P1*binCoeff[tempS])
+                        cumSum += wn1 - wn0
+
             # Decide correct or not:
             if cumSum >= theta:
                 results += 1
