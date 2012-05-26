@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMMIPSIN5'
+quickNamePrefix = 'corrDDMMIPSIOvershoot'
 dryRun = 0
 localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
@@ -13,7 +13,7 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 10000
+simsPerRep = 100
 
 Coh = 6.4
 rP = 40 + .4*Coh
@@ -21,8 +21,8 @@ rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,50,20)),
-'N':[5],
+'theta':list(numpy.linspace(.01,1200,20)),
+'N':[240],
 'dt':[.1],
 'corr':[.15],
 'rP':[rP],
