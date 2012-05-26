@@ -42,6 +42,8 @@ def DDMOU(settings, int FD,int perLoc):
     cdef unsigned long mySeed[624]
     cdef c_MTRand myTwister
     cdef float cumSum, wp1, wp0, wn1, wn0, P0,P1, N0, N1
+    cdef float logP1N1Ratio, logN1P1Ratio
+    
     
     # Convert settings dictionary to iterator:
     params = settings.keys()
@@ -82,6 +84,8 @@ def DDMOU(settings, int FD,int perLoc):
         N0 = (1-dt*rN*.001*corrInv)
         P1 = (dt*rP*.001*corrInv)
         N1 = (dt*rN*.001*corrInv)
+        logP1N1Ratio = log(P1/N1)
+        logN1P1Ratio = log(N1/P1)
         
         # Loop across number of sims, at this point in parameter space
         for i in range(perLoc):
@@ -105,7 +109,7 @@ def DDMOU(settings, int FD,int perLoc):
                         wp1 = log(P0 + P1*binCoeff[tempS])
                         wp0 = log(N0 + N1*binCoeff[tempS])
                     else:
-                        wp1 = log(P1/N1)
+                        wp1 = log(logP1N1Ratio)
                         wp0 = 0
                     cumSum += wp1 - wp0
 
@@ -120,7 +124,7 @@ def DDMOU(settings, int FD,int perLoc):
                         wn1 = log(N0 + N1*binCoeff[tempS])
                         wn0 = log(P0 + P1*binCoeff[tempS])
                     else:
-                        wn1 = log(N1/P1)
+                        wn1 = log(logN1P1Ratio)
                         wn0 = 0
                     cumSum += wn1 - wn0
 
