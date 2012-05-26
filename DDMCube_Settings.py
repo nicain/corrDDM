@@ -13,7 +13,11 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 100
+simsPerRep = 50
+
+Coh = 6.4
+rP = 40 + .4*Coh
+rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
@@ -21,5 +25,5 @@ settings={
 'N':[5],
 'dt':[.01],
 'corr':[.15],
-'rP':[21],
-'rN':[19]}
+'rP':[rP],
+'rN':[rN]}
