@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMSIPSPRT'
+quickNamePrefix = 'corrDDMSIPSPRTCorrCorrect'
 dryRun = 0
 localRun = 0
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
@@ -10,10 +10,10 @@ queue = 'default'
 FD=0
 
 # Divide jobs among processing unit settings:
-nodes = 1
+nodes = 4
 procsPerNode = 8
 repsPerProc = 1
-simsPerRep = 6250
+simsPerRep = 3125
 
 Coh = 6.4
 rP = 40 + .4*Coh
