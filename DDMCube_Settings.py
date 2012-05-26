@@ -10,10 +10,10 @@ queue = 'default'
 FD=0
 
 # Divide jobs among processing unit settings:
-nodes = 1
+nodes = 8
 procsPerNode = 8
 repsPerProc = 1
-simsPerRep = 6250
+simsPerRep = 3025
 
 Coh = 6.4
 rP = 40 + .4*Coh
