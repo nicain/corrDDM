@@ -13,7 +13,7 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 100
+simsPerRep = 1000
 
 Coh = 6.4
 rP = 40 + .4*Coh
