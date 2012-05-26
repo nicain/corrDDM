@@ -1,9 +1,9 @@
 # Define job:
-quickNamePrefix = 'corrDDMSIPSIdtCheckBig'
+quickNamePrefix = 'corrDDMSIPSI'
 dryRun = 0
-localRun = 0
+localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
-waitForSims = 0
+waitForSims = 1
 wallTime = 10000
 wallTimeEstCount = 1
 queue = 'default'
@@ -11,9 +11,9 @@ FD=0
 
 # Divide jobs among processing unit settings:
 nodes = 1
-procsPerNode = 8
+procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 6250
+simsPerRep = 10
 
 # Define job settings:
 settings={
