@@ -109,7 +109,7 @@ def DDMOU(settings, int FD,int perLoc):
                         wp1 = log(P0 + P1*binCoeff[tempS])
                         wp0 = log(N0 + N1*binCoeff[tempS])
                     else:
-                        wp1 = log(logP1N1Ratio)
+                        wp1 = logP1N1Ratio
                         wp0 = 0
                     cumSum += wp1 - wp0
 
@@ -124,7 +124,7 @@ def DDMOU(settings, int FD,int perLoc):
                         wn1 = log(N0 + N1*binCoeff[tempS])
                         wn0 = log(P0 + P1*binCoeff[tempS])
                     else:
-                        wn1 = log(logN1P1Ratio)
+                        wn1 = logN1P1Ratio
                         wn0 = 0
                     cumSum += wn1 - wn0
 
@@ -139,5 +139,5 @@ def DDMOU(settings, int FD,int perLoc):
         resultsArray[counter] = results
         overShootArray[counter] = overShootP
         counter += 1
-
+    
     return (resultsArray, overShootArray)
