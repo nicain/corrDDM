@@ -78,10 +78,10 @@ def DDMOU(settings, int FD,int perLoc):
         results = 0
         for i in range(N+1):
             binCoeff[i] = scipy.misc.comb(N,i)*(corr)**i*(1-corr)**(N-i)
-        P0 = (1-dt*rP*.001/corr)
-        N0 = (1-dt*rN*.001/corr)
-        P1 = (dt*rP*.001/corr)
-        N1 = (dt*rN*.001/corr)
+        P0 = (1-dt*rP*.001*corrInv)
+        N0 = (1-dt*rN*.001*corrInv)
+        P1 = (dt*rP*.001*corrInv)
+        N1 = (dt*rN*.001*corrInv)
         
         # Loop across number of sims, at this point in parameter space
         for i in range(perLoc):
