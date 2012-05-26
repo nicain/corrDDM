@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMSIPSPRTCorrCorrect'
+quickNamePrefix = 'corrDDMSIPSPRTCorrCorrectAgain'
 dryRun = 0
 localRun = 0
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
