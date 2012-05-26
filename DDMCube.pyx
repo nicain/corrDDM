@@ -26,8 +26,8 @@ def DDMOU(settings, int FD,int perLoc):
     # C initializations
     cdef int i, currN
     cdef float corr, dt, rP, rN
-    cdef int N
-    cdef float t, results, crossTimes, theta
+    cdef int N, tempS
+    cdef float t, results, overShootP, theta
     cdef unsigned long mySeed[624]
     cdef c_MTRand myTwister
     cdef float cumSum
@@ -42,7 +42,7 @@ def DDMOU(settings, int FD,int perLoc):
         totalLength *= len(settings[parameter])
     settingsIterator = product.product(*settingsList)
     resultsArray = zeros(totalLength, dtype=float)
-    crossTimesArray = zeros(totalLength, dtype=float)
+    overShootArray = zeros(totalLength, dtype=float)
 
     # Initialization of random number generator:
     myUUID = uuid.uuid4()
@@ -53,10 +53,11 @@ def DDMOU(settings, int FD,int perLoc):
     # Parameter space loop:
     counter = 0
     for currentSettings in settingsIterator:
-        N, corr, dt, rN rP, theta = currentSettings   # Alphabetized, caps first!
+        N, corr, dt, rN, rP, theta = currentSettings   # Alphabetized, caps first!
 
         # Initialize for current parameter space value
-        crossTimes = 0
+        overShootP = 0
+        overShootN = 0
         results = 0
         
         # Loop across number of sims, at this point in parameter space
@@ -90,13 +91,13 @@ def DDMOU(settings, int FD,int perLoc):
             # Decide correct or not:
             if cumSum >= theta:
                 results += 1
-            crossTimes += t
+                overShootP += cumSum - theta
                     
                     
 
         # Record results:
         resultsArray[counter] = results
-        crossTimesArray[counter] = crossTimes
+        overShootArray[counter] = overShootP
         counter += 1
 
-    return (resultsArray, crossTimesArray)
+    return (resultsArray, overShootArray)
