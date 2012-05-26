@@ -1,19 +1,19 @@
 # Define job:
 quickNamePrefix = 'corrDDMMIPSPRT'
 dryRun = 0
-localRun = 0
+localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
-waitForSims = 0
+waitForSims = 1
 wallTime = 10000
 wallTimeEstCount = 1
 queue = 'default'
 FD=0
 
 # Divide jobs among processing unit settings:
-nodes = 12
-procsPerNode = 8
+nodes = 1
+procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 520
+simsPerRep = 1000
 
 Coh = 6.4
 rP = 40 + .4*Coh

@@ -105,9 +105,9 @@ def DDMOU(settings, int FD,int perLoc):
                         wp1 = log(P0 + P1*binCoeff[tempS])
                         wp0 = log(N0 + N1*binCoeff[tempS])
                     else:
-                        wp1 = log(P1*binCoeff[tempS])
-                        wp0 = log(N1*binCoeff[tempS])
-                        cumSum += wp1 - wp0
+                        wp1 = log(P1/N1)
+                        wp0 = 0
+                    cumSum += wp1 - wp0
 
                 # Null population
                 if myTwister.randDblExc() < dt*rN*.001*corrInv:
@@ -120,9 +120,9 @@ def DDMOU(settings, int FD,int perLoc):
                         wn1 = log(N0 + N1*binCoeff[tempS])
                         wn0 = log(P0 + P1*binCoeff[tempS])
                     else:
-                        wn1 = log(N1*binCoeff[tempS])
-                        wn0 = log(P1*binCoeff[tempS])
-                        cumSum += wn1 - wn0
+                        wn1 = log(N1/P1)
+                        wn0 = 0
+                    cumSum += wn1 - wn0
 
             # Decide correct or not:
             if cumSum >= theta:
