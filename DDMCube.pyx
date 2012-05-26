@@ -57,7 +57,6 @@ def DDMOU(settings, int FD,int perLoc):
 
         # Initialize for current parameter space value
         overShootP = 0
-        overShootN = 0
         results = 0
         
         # Loop across number of sims, at this point in parameter space
@@ -92,7 +91,6 @@ def DDMOU(settings, int FD,int perLoc):
             if cumSum >= theta:
                 results += 1
                 overShootP += cumSum - theta
-                    
                     
 
         # Record results:

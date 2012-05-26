@@ -13,7 +13,7 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 50
+simsPerRep = 1000
 
 Coh = 6.4
 rP = 40 + .4*Coh
@@ -21,7 +21,7 @@ rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,1500,20)),
+'theta':list(numpy.linspace(.01,200,20)),
 'N':[240],
 'dt':[.1],
 'corr':[.15],
