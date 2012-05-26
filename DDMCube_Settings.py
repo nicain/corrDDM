@@ -1,10 +1,10 @@
 # Define job:
-quickNamePrefix = 'corrDDMDebug'
+quickNamePrefix = 'corrDDMMIPSI'
 dryRun = 0
 localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
 waitForSims = 1
-wallTime = 5000
+wallTime = 10000
 wallTimeEstCount = 1
 queue = 'default'
 FD=0
@@ -13,7 +13,11 @@ FD=0
 nodes = 1
 procsPerNode = 1
 repsPerProc = 1
-simsPerRep = 10000
+simsPerRep = 1000
+
+Coh = 6.4
+rP = 40 + .4*Coh
+rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
@@ -21,5 +25,5 @@ settings={
 'N':[240],
 'dt':[.1],
 'corr':[.15],
-'rP':[21],
-'rN':[19]}
+'rP':[rP],
+'rN':[rN]}
