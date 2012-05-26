@@ -79,7 +79,7 @@ def DDMOU(settings, int FD,int perLoc):
                             cumSum += 1
                                 
                 # Null population:
-                if myTwister.randDblExc() < dt*rN*.001*corr:
+                if myTwister.randDblExc() < dt*rP*.001*corr:
                     cumSum -= N
                 else:
                     for currN in range(N):
