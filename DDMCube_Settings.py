@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMDebug'
+quickNamePrefix = 'corrDDMSIPSIOvershoot'
 dryRun = 0
 localRun = 1
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
@@ -21,9 +21,9 @@ rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,50,10)),
-'N':[5],
-'dt':[.01],
+'theta':list(numpy.linspace(.01,1500,20)),
+'N':[240],
+'dt':[.1],
 'corr':[.15],
 'rP':[rP],
 'rN':[rN]}
