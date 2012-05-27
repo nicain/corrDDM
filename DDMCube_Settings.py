@@ -21,7 +21,7 @@ rN = 40 - .4*Coh
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,200,20)),
+'theta':list(numpy.linspace(.01,250,20)),
 'N':[240],
 'dt':[.1],
 'corr':[.15],
