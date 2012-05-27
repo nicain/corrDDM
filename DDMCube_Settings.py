@@ -1,5 +1,5 @@
 # Define job:
-quickNamePrefix = 'corrDDMMIPSI'
+quickNamePrefix = 'corrDDMMIPSIBig'
 dryRun = 0
 localRun = 0
 runType = 'batch'			# 'batch' or 'wallTimeEstimate'
@@ -10,14 +10,14 @@ queue = 'default'
 FD=0
 
 # Divide jobs among processing unit settings:
-nodes = 6
+nodes = 24
 procsPerNode = 8
 repsPerProc = 1
-simsPerRep = 1040
+simsPerRep = 520
 
 # Define job settings:
 settings={
-'theta':list(numpy.linspace(.01,1200,20)),
+'theta':list(numpy.linspace(.01,1200,200)),
 'N':[240],
 'dt':[.1],
 'corr':[.15],
