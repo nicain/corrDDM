@@ -101,7 +101,7 @@ def DDMOU(settings, int FD,int perLoc):
 
         # Record results:
         resultsArray[counter] = results
-        overShootArray[counter] = overShoot1stMom+1J*overShoot2ndMom
+        overShootArray[counter] = perLoc*overShoot1stMom+1J*overShoot2ndMom
         counter += 1
 
     return (resultsArray, overShootArray)
